@@ -1,6 +1,5 @@
 # Z Wave Zuno
-This repo is used to store a zuno module projet used to manipulate 4 relays switches.
-The module is managed by a Jeedom Z Wave Controller.
+This repo is used to store a zuno module projet used to manage some devices.
 
 ## Configure the host computer
 Read the documentation from the Zuno website and download the Quick Start Guide.
@@ -18,5 +17,9 @@ A custom battery metter is exposed but the value is a constant.
 The **FLIRS powersave mode** is enabled but the sleep mode is never called so it's like the **always on** profile.
 
 ## Jeedom
+Jeedom is a Z Wave Controller software.
+Configuration is quite simple once the device is correctly associated.
+
+### Commands
 Comming next
 
