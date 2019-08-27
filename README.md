@@ -16,6 +16,9 @@ They are exposed to the controller as binary / bool values.
 A custom battery metter is exposed but the value is a constant.
 The **FLIRS powersave mode** is enabled but the sleep mode is never called so it's like the **always on** profile.
 
+## zuno-switch2.ino
+Same as the 1 and adding pins 3 to 6.
+
 ## Jeedom
 Jeedom is a Z Wave Controller software.
 Configuration is quite simple once the device is correctly associated.
