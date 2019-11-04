@@ -1,4 +1,4 @@
-const byte _LOOP_DELAY_MS = 200; // Loop delay
+const byte _LOOP_DELAY_MS = 100; // Loop delay
 byte blinkLedLoopCount = 0; // Blink led loop count
 byte pin03;
 byte pin04;
@@ -32,8 +32,8 @@ ZUNO_SETUP_SLEEPING_MODE(ZUNO_SLEEPING_MODE_FREQUENTLY_AWAKE);
 // - Power ON
 // - Wake after sleep
 void setup() {  
-  // Serial.begin(9600);
-  Serial.begin();
+  Serial.begin(9600);
+  //Serial.begin();
   Serial.println("Starting...");
 
   // OUTPUT is a low voltage pin mode that works with relay switches
@@ -68,39 +68,6 @@ void setup() {
   zunoSendReport(8); // pin22  
 
   blinkLedLoopCount = 10; // Startup
-
-  setterPin03(LOW);
-  delay(1000);
-  setterPin04(LOW);
-  delay(1000);
-  setterPin05(LOW);
-  delay(1000);
-  setterPin06(LOW);
-  delay(1000);
-  setterPin19(LOW);
-  delay(1000);
-  setterPin20(LOW);
-  delay(1000);
-  setterPin21(LOW);
-  delay(1000);
-  setterPin22(LOW);
-  delay(1000);
-  setterPin03(HIGH);
-  delay(1000);
-  setterPin04(HIGH);
-  delay(1000);
-  setterPin05(HIGH);
-  delay(1000);
-  setterPin06(HIGH);
-  delay(1000);
-  setterPin19(HIGH);
-  delay(1000);
-  setterPin20(HIGH);
-  delay(1000);
-  setterPin21(HIGH);
-  delay(1000);
-  setterPin22(HIGH);
-
 }
 
 // Loop
@@ -116,10 +83,6 @@ void blinkLed() {
   // Blinking Led
   if (blinkLedLoopCount > 0) {
     byte value = digitalRead(LED_BUILTIN);
-    Serial.print("Led value = ");
-    Serial.print(value);
-    Serial.print(" | Count = ");
-    Serial.println(blinkLedLoopCount);    
     if (value == 0 && blinkLedLoopCount > 1) {
       digitalWrite(LED_BUILTIN, HIGH);  
     }
