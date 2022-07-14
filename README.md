@@ -19,10 +19,30 @@ The **FLIRS powersave mode** is enabled but the sleep mode is never called so it
 ## zuno-switch2.ino
 Same as the 1 and adding pins 3 to 6.
 
+## zuno-switch3.ino
+This release is trying to get less lag on requests.
+- Big code cleanup
+- Removed the FLIRS powersave mode so the battery monitor is disabled (Zuno SDK)
+- Removed the sleep inside the loop code
+- Adding 2 "virtual pins" managing respectively the channels 1-4 and 5-8.
+
+
 ## Jeedom
 Jeedom is a Z Wave Controller software.
 Configuration is quite simple once the device is correctly associated.
 
 ### Commands
-Comming next
+Switch 1 status information
+- Add a binary information request
+- Set the class to 37 (binary switch), instance to 1 and index to 0
+
+Switch 1 - Power ON
+- Add an action (default mode) associated to the button status previously created 
+- Set the same class, instance and index
+- Set the command arguments to this : type=setvalue&value=0
+
+Switch 1 - Power OFF
+- Same as Power ON except the command argument value that needs to be 255 : type=setvalue&value=255
+
+
 
