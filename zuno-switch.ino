@@ -36,7 +36,7 @@ ZUNO_SETUP_SLEEPING_MODE(ZUNO_SLEEPING_MODE_ALWAYS_AWAKE); // Always ON, no batt
 void setup() {  
   Serial.begin(9600);
   //Serial.begin();
-  Serial.println("Starting b20220714.1 ...");
+  Serial.println("Starting zuno-switch4 b20241221.1 ...");
 
   // OUTPUT is a low voltage pin mode that works with relay switches
   pinMode(LED_BUILTIN, OUTPUT);

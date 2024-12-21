@@ -10,6 +10,14 @@ Take care about these settings from the Arduino IDE :
 - Tools / Programmer / Zuno
 - Tools / Burn bootloader
 
+### Serial
+- 9600 baud
+- Start the serial monitor and then do a reset from the button switch, console will then show activity
+
+## zuno-switch.ino
+Latest version, v4.
+
+
 ## zuno-switch1.ino
 This sketch manages 4 pins, the 19 to 22 by doing a single switch on them.
 They are exposed to the controller as binary / bool values.
@@ -25,6 +33,10 @@ This release is trying to get less lag on requests.
 - Removed the FLIRS powersave mode so the battery monitor is disabled (Zuno SDK)
 - Removed the sleep inside the loop code
 - Adding 2 "virtual pins" managing respectively the channels 1-4 and 5-8.
+
+## Home assistant
+Unable to associate device into ha. There is an issue with the "no profile" status of zuno.
+Could be possible to clone existing configuration.
 
 
 ## Jeedom
