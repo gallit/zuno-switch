@@ -35,9 +35,7 @@ This release is trying to get less lag on requests.
 - Adding 2 "virtual pins" managing respectively the channels 1-4 and 5-8.
 
 ## Home assistant
-Unable to associate device into ha. There is an issue with the "no profile" status of zuno.
-Could be possible to clone existing configuration.
-
+Press service button 3 times to integrate into ha. S0 security seems to be not working.
 
 ## Jeedom
 Jeedom is a Z Wave Controller software.

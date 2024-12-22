@@ -1,29 +1,29 @@
-const byte _LOOP_DELAY_MS = 100; // Loop delay
+const byte _LOOP_DELAY_MS = 50; // Loop delay
 byte blinkLedLoopCount = 0; // Blink led loop count
+unsigned int loopCount = 0; // Blink led loop count
 byte pin03;
 byte pin04;
 byte pin05;
 byte pin06;
+/*
 byte pin19;
 byte pin20;
 byte pin21;
 byte pin22;
 byte pinVirt01;
 byte pinVirt02;
-unsigned int setterLoopCountVirt01;
-unsigned int setterLoopCountVirt02;
+*/
 // Switch controls
 ZUNO_SETUP_CHANNELS(
   ZUNO_SWITCH_BINARY(pin03, NULL),
   ZUNO_SWITCH_BINARY(pin04, NULL),
   ZUNO_SWITCH_BINARY(pin05, NULL),
-  ZUNO_SWITCH_BINARY(pin06, NULL),
+  ZUNO_SWITCH_BINARY(pin06, NULL)
+  /*
   ZUNO_SWITCH_BINARY(pin19, NULL),
   ZUNO_SWITCH_BINARY(pin20, NULL),
   ZUNO_SWITCH_BINARY(pin21, NULL),
-  ZUNO_SWITCH_BINARY(pin22, NULL),
-  ZUNO_SWITCH_BINARY(pinVirt01, NULL),
-  ZUNO_SWITCH_BINARY(pinVirt02, NULL)
+  ZUNO_SWITCH_BINARY(pin22, NULL)  */
 );
 
 // SleepMode disabled
@@ -34,12 +34,10 @@ ZUNO_SETUP_SLEEPING_MODE(ZUNO_SLEEPING_MODE_ALWAYS_AWAKE); // Always ON, no batt
 // - Power ON
 // - Wake after sleep
 void setup() {  
-  Serial.begin(9600);
-  //Serial.begin();
-  Serial.println("Starting zuno-switch4 b20241221.1 ...");
+  Serial.begin(9600);  
 
   // OUTPUT is a low voltage pin mode that works with relay switches
-  pinMode(LED_BUILTIN, OUTPUT);
+  pinMode(LED_BUILTIN, OUTPUT);  
   pinMode(3, OUTPUT);
   pinMode(4, OUTPUT);
   pinMode(5, OUTPUT);
@@ -54,26 +52,32 @@ void setup() {
   pin04 = LOW;
   pin05 = LOW;
   pin06 = LOW;  
+
+  /*
   pin19 = LOW;
   pin20 = LOW;
   pin21 = LOW;
   pin22 = LOW;
   pinVirt01 = LOW;
   pinVirt02 = LOW;
+  */
   
   setPinValue(1, 3, pin03);
   setPinValue(2, 4, pin04);
   setPinValue(3, 5, pin05);
   setPinValue(4, 6, pin06);
+  /*
   setPinValue(5, 19, pin19);
   setPinValue(6, 20, pin20);
   setPinValue(7, 21, pin21);
   setPinValue(8, 22, pin22);
+  */
   
   zunoSendReport(1);
   zunoSendReport(2);
   zunoSendReport(3);
   zunoSendReport(4);
+  /*
   zunoSendReport(5);
   zunoSendReport(6);
   zunoSendReport(7);
@@ -81,6 +85,7 @@ void setup() {
 
   zunoSendReport(9);  // pinvirt01  
   zunoSendReport(10); // pinvirt02
+  */
 
   blinkLedLoopCount = 10; // Startup
 }
@@ -88,6 +93,17 @@ void setup() {
 // Loop
 void loop() {      
   blinkLed();
+  loopCount++;
+  
+  if (loopCount > 1000) {
+    blinkLedLoopCount = 5;
+    Serial.println("zuno-switch v4 b20241222.7"); 
+    zunoSendReport(1);
+    zunoSendReport(2);
+    zunoSendReport(3);
+    zunoSendReport(4);
+    loopCount = 0;
+  }  
 
   if (zunoIsChannelUpdated(1)) {
     setPinValue(1, 3, pin03);
@@ -101,6 +117,7 @@ void loop() {
   if (zunoIsChannelUpdated(4)) {
     setPinValue(4, 6, pin06);
   }
+  /*
   if (zunoIsChannelUpdated(5)) {
     setPinValue(5, 19, pin19);
   }
@@ -118,10 +135,10 @@ void loop() {
   }
   if (zunoIsChannelUpdated(10)) {
     setPinVirtValue(10, 2, pinVirt02);
-  }
+  }*/
   
   
-  //delay(_LOOP_DELAY_MS);
+  delay(_LOOP_DELAY_MS);
 }
 
 // *** User functions ***
@@ -130,7 +147,7 @@ void blinkLed() {
   // Blinking Led
   if (blinkLedLoopCount > 0) {
     byte value = digitalRead(LED_BUILTIN);
-    if (value == 0 && blinkLedLoopCount > 1) {
+    if (value == 0 && blinkLedLoopCount > 1) {      
       digitalWrite(LED_BUILTIN, HIGH);  
     }
     else {
@@ -164,6 +181,7 @@ byte getPinValue(byte channel, byte pin) {
   return value;
 }
 
+/*
 // vIndex = Virtual pin index
 // 1 = 1 to 4
 // 2 = 5 to 8
@@ -177,31 +195,46 @@ byte getPinVirtValue(byte vIndex) {
   Serial.println(r);  
   return r;
 }
+*/
 
 // channel = zwave channel index
 void setPinValue(byte channel, byte pin, byte value) {
   blinkLedLoopCount = 10;
-  value = getLowHigh(value);
+  byte v = getLowHigh(value);
   Serial.print("Setting C"); 
   Serial.print(channel);
   Serial.print(".PIN");
   Serial.print(pin);
   Serial.print(" to value ");
-  Serial.println(value);
-  digitalWrite(pin, value);
-  
+  Serial.println(v);
+
   byte r = digitalRead(pin);
-  if (r != value) {
+  if (r == v) {
+    Serial.println("Warning : Value already set");
+    zunoSendReport(channel);  
+    delay(100);
+    //Serial.println("Warning : *** REBOOT ***");
+    //zunoReboot();
+  }
+  digitalWrite(pin, v);
+  
+  r = digitalRead(pin);
+  if (r == v) {
+    Serial.println("Pin value correctly updated");
+  }
+  else {
     Serial.print("Warning : digitalWrite failure on PIN");
     Serial.print(pin);
     Serial.print(". Expected : ");
-    Serial.print(value);
+    Serial.print(v);
     Serial.print(" / Read : ");
     Serial.println(r);
   }
+  
   zunoSendReport(channel);
 }
 
+/*
 void setPinVirtValue(byte channel, byte vIndex, byte value) {
   // value = getLowHigh(value);
   Serial.print("Setting C");
@@ -237,3 +270,4 @@ void setPinVirtValue(byte channel, byte vIndex, byte value) {
   }
   zunoSendReport(channel);
 }
+*/
