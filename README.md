@@ -15,7 +15,29 @@ Take care about these settings from the Arduino IDE :
 - Start the serial monitor and then do a reset from the button switch, console will then show activity
 
 ## zuno-switch.ino
-Latest version, v4.
+Latest version, v5.
+BinarySwitch updated to have now getters and setters functions. No variable anymore.
+That will help in debug on serial port.
+Noticed some mismatch between pin values and zwave values sent.
+Switch|Pin|ZWave
+-|-|-
+OFF|0 (LOW)|0
+ON|1 (HIGH)|255
+
+Switch mapping
+Switch|Pin
+-|-
+1 | 03
+2 | 04
+3 | 05
+4 | 06
+5 | 19
+6 | 20
+7 | 21
+8 | 22
+
+
+Maybe issue is due on reporting the ON value 1 instead of 255. Let's patch and check.
 
 
 ## zuno-switch1.ino
@@ -33,6 +55,14 @@ This release is trying to get less lag on requests.
 - Removed the FLIRS powersave mode so the battery monitor is disabled (Zuno SDK)
 - Removed the sleep inside the loop code
 - Adding 2 "virtual pins" managing respectively the channels 1-4 and 5-8.
+
+## zuno-switch4.ino
+New version of zwave make the module to hang during get/set pin values.
+ZWave connection gets lost because the set value is continously sent to device.
+This version has many patches but does not succeed.
+
+
+
 
 ## Home assistant
 Press service button 3 times to integrate into ha. S0 security seems to be not working.
